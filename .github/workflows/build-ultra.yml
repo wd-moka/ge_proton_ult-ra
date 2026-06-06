@@ -1,0 +1,61 @@
+name: ULT-RA
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  forge-modules:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code and Submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive 
+
+    - name: Set up Cloud Docker Engine
+      uses: docker/setup-buildx-action@v3
+
+    - name: Compile DXVK
+      run: |
+        cd dxvk
+        docker run --rm -v $(pwd):/src -w /src ghcr.io/gloriouseggroll/proton-sdk:latest \
+          bash -c "./package-release.sh master /build --build"
+
+    - name: Compile DXVK-NVAPI
+      run: |
+        cd dxvk-nvapi
+        docker run --rm -v $(pwd):/src -w /src ghcr.io/gloriouseggroll/proton-sdk:latest \
+          bash -c "meson setup --cross-file build-win64.txt build64 && cd build64 && ninja"
+
+    - name: Compile VKD3D & VKD3D-Proton
+      run: |
+        cd vkd3d-proton
+        docker run --rm -v $(pwd):/src -w /src ghcr.io/gloriouseggroll/proton-sdk:latest \
+          bash -c "./package-release.sh master /build --build"
+
+    - name: Compile Steam and VR Helpers
+      run: |
+        cd lsteamclient
+        make -j$(nproc)
+        cd ../vrclient_x64
+        make -j$(nproc)
+
+    - name: Assemble Completed Gaming Vault
+      run: |
+        mkdir -p final_vault/x64/
+        mkdir -p final_vault/x32/
+        
+        cp -r dxvk/build/x64/*.dll final_vault/x64/ || true
+        cp -r dxvk/build/x32/*.dll final_vault/x32/ || true
+        cp -r vkd3d-proton/build/x64/*.dll final_vault/x64/ || true
+        cp -r dxvk-nvapi/build64/src/*.dll final_vault/x64/ || true
+        cp lsteamclient/lsteamclient.so final_vault/x64/ || true
+        cp vrclient_x64/vrclient_x64.dll final_vault/x64/ || true
+
+    - name: Upload Finished Translation
+      uses: actions/upload-artifact@v4
+      with:
+        name: ult-ra-binaries
+        path: final_vault/
