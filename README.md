@@ -5,7 +5,7 @@ uhhh. guys . this the newest update :
 
 # chapter i : what happened to the project? :
 well , well , well, here we go again.
-i got some bottlenecking on my deive. This project was made to add thing like DXVK and the stuff from ge proton 10-31.
+i got some bottlenecking on my device. This project was made to add thing like DXVK and the stuff from ge proton 10-31.
 most of that stuff is VULKAN. and when did vulkan realese? 2016.
 ... plot twist : i have an intel i3-4030U from 2014. its temp is like 85 - 95 when i do some work at it. yeah.
 i need to get thermal paste as fast as i can.
