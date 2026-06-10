@@ -22,5 +22,6 @@ i really loved the name : GE PROTON - ULT-RA.
 because its sci-fi and good. 
 welllll. do whatever you want!
 thanks for reading.
+this project is note mine anymore. if you want to do it. then its idea are simpile. just add everything good to wine 11 stagging and ge proton patchs and here we go. ge proton 11 i think? i dont know. ge proton 10-31 is not by me.
 
 - moka_ - 2026/7/10
